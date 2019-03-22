@@ -35,6 +35,10 @@ nav ul {
 nav li {
   float: left;
 }
+table {
+    background-image: linear-gradient(to bottom right,#0d345c,#00122a);
+}
+
 
 nav li a {
   display: block;
@@ -45,7 +49,7 @@ nav li a {
 }
 
 nav li a:hover {
-  background-color: #d9390d;
+  background-color: #eb0685;
 }
 
 nav button {

@@ -5,6 +5,7 @@ class Nav extends Component {
   state = {};
 
   render() {
+    const { isAuthenticated, login, logout } = this.props.auth;
     return (
       <nav>
         <ul>
@@ -15,11 +16,16 @@ class Nav extends Component {
             <Link to="/profile">Profile</Link>
           </li>
           <li>
+            <button onClick={isAuthenticated() ? logout : login}>
+              {this.props.auth.isAuthenticated() ? "Log Out" : "Log In"}
+            </button>
+          </li>
+          {/*<li>
             <Link to="/policies">Policies</Link>
           </li>
           <li>
             <Link to="/claims">Claims</Link>
-          </li>
+          </li>*/}
         </ul>
       </nav>
     );
