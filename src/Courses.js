@@ -16,6 +16,16 @@ class Courses extends Component {
       })
       .then(res => this.setState({ courses: res.courses }))
       .catch(error => this.setState({ error: error.message }));
+
+    fetch("/admin", {
+      headers: { Authorization: `Bearer ${this.props.auth.getAccessToken()}` }
+    })
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error("Network response was not ok");
+      })
+      .then(res => console.log(res))
+      .catch(error => this.setState({ error: error.message }));
   }
 
   render() {
