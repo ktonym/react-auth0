@@ -9,32 +9,44 @@ import Public from "./Public";
 import Private from "./Private";
 import Courses from "./Courses";
 import SecureRoute from "./SecureRoute";
+import AuthContext from "./AuthContext";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.auth = new Auth(this.props.history);
+    this.state = {
+      auth: new Auth(this.props.history),
+        tokenRenewalComplete: false
+    };
   }
+
+  componentDidMount(){
+    this.state.auth.renewToken(() => this.setState({tokenRenewalComplete: true}));
+  }
+
   render() {
+    const {auth} = this.state;
+    // Show loading message until the token renewal check is completed.
+      if (!this.state.tokenRenewalComplete) return "Loading...";
     return (
-      <>
-        <Nav auth={this.auth} />
+      <AuthContext.Provider value={auth}>
+        <Nav auth={auth} />
         <div className="body">
           <Route
             path="/"
             exact
-            render={props => <Home auth={this.auth} {...props} />}
+            render={props => <Home auth={auth} {...props} />}
           />
           <Route
             path="/callback"
-            render={props => <Callback auth={this.auth} {...props} />}
+            render={props => <Callback auth={auth} {...props} />}
           />
-          <SecureRoute path="/profile" component={Profile} auth={this.auth} />
+          <SecureRoute path="/profile" component={Profile} />
           <Route path="/public" component={Public} />
-          <SecureRoute path="/private" component={Private} auth={this.auth}/>
-          <SecureRoute path="/courses" component={Courses} scopes={["read:courses"]}  auth={this.auth}/>
+          <SecureRoute path="/private" component={Private} scopes={["read:wildlife","read:animals"]} />
+          <SecureRoute path="/courses" component={Courses} scopes={["read:courses"]} />
         </div>
-      </>
+      </AuthContext.Provider>
     );
   }
 }
